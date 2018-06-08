@@ -1,4 +1,4 @@
-from goodflybot import main
+from goodflybot import core
 
-main.begin()
+core.main()
 

@@ -1,14 +1,8 @@
 from telegram.ext import Updater
-from .config import Config
-
+from config import Config
+from DataWorker import FSWorker
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
-
-
-class TelegramBot(object):
-    def __init__(self, config):
-        self.config = config
-        self.updater = Updater(token=config.get('token'))
 
 
 def start(bot, update):
@@ -18,19 +12,24 @@ def echo(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 
-def begin():
+def main():
     #точка входа в программу
     config = Config()
-    token = config.get('token')
+    token = config.token
 
-    updater = Updater(token='TOKEN')
+    updater = Updater(token=token)
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler('start', start) #start command
     dispatcher.add_handler(start_handler)
-    updater.start_polling()
+
 
     echo_handler = MessageHandler(Filters.text, echo) # echo filter and answer
     dispatcher.add_handler(echo_handler)
 
-    updater.stop()
+    updater.start_polling()
+
+    updater.idle()
+
+if __name__ == '__main__':
+    main()

@@ -1,4 +1,5 @@
 import logging
+import pickle
 from abc import ABCMeta
 import os.path as Path
 
@@ -23,8 +24,7 @@ class FSWorker(metaclass=ABCMeta):
 
     @classmethod
     def get_static(cls):
-        path = Path.join(Path.dirname(__file__), '/common/conf.pickle')
-
+        path = Path.join(Path.dirname(__file__), 'common/conf.pickle')
         if not Path.exists(path):
             cls.log("path '{}' doesn't exist".format(path))
             return

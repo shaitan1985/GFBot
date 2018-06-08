@@ -1,4 +1,4 @@
-from .DataWorker import FSWorker
+from DataWorker import FSWorker
 
 def singleton(cls):
     instances = {}
