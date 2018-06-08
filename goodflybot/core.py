@@ -1,15 +1,12 @@
-from telegram.ext import Updater
+from telegram.ext import (Updater, CommandHandler, MessageHandler, Filters, RegexHandler,
+                        ConversationHandler)
+from telegram import ReplyKeyboardMarkup
 from config import Config
 from DataWorker import FSWorker
 from telegram.ext import CommandHandler, MessageHandler, Filters
 
 
 
-def start(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text="I'm a bot, please talk to me!")
-
-def echo(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
 
 def main():
@@ -18,14 +15,24 @@ def main():
     token = config.token
 
     updater = Updater(token=token)
+
     dispatcher = updater.dispatcher
 
-    start_handler = CommandHandler('start', start) #start command
-    dispatcher.add_handler(start_handler)
+    #Add conversation handler - named params
+
+    conv_handler = ConversationHandler(
+        entry_points=..., #list of hndlers
+        states=..., #dict of handlers
+        fallbacks=...   #list of handlers
 
 
-    echo_handler = MessageHandler(Filters.text, echo) # echo filter and answer
-    dispatcher.add_handler(echo_handler)
+    )
+
+
+
+
+
+
 
     updater.start_polling()
 
