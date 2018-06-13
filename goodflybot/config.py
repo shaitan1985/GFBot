@@ -1,4 +1,4 @@
-from DataWorker import FSWorker
+from goodflybot.DataWorker import FSWorker
 
 def singleton(cls):
     instances = {}
