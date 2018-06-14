@@ -8,19 +8,22 @@ from goodflybot.DataWorker import FSWorker
 
 CHOOSING, TYPING_REPLY, TYPING_CHOICE = range(3)
 
-reply_keyboard = [['Microphones', 'Preamps', 'Compressors', 'Contacts'],
+reply_keyboard_button = [['Products'],
                   ['/Start', 'Done']]
 keyboard = [[
-    InlineKeyboardButton('Microphones', url='http://goodflymicrophones.com/mikrofony/'),
-    InlineKeyboardButton('Preamps', url='http://goodflymicrophones.com/goodfly-mp312-2/')],
-    [InlineKeyboardButton('Compressors', url='http://goodflymicrophones.com/kompressory/'),
-    InlineKeyboardButton('Contacts', url='http://goodflymicrophones.com/kontakty/')]
+    InlineKeyboardButton('Microphones:', url='http://goodflymicrophones.com/mikrofony/')],
+    [InlineKeyboardButton('U47', url='http://goodflymicrophones.com/goodfly-u47-2/'),
+    InlineKeyboardButton('U47 fet', url='http://goodflymicrophones.com/goodfly_u47_fet/'),
+    InlineKeyboardButton('C12', url='http://goodflymicrophones.com/gooodfly-c12/')],
+    [InlineKeyboardButton('Preamps:', url='http://goodflymicrophones.com/goodfly-mp312-2/'),
+    InlineKeyboardButton('Compressors:', url='http://goodflymicrophones.com/kompressory/')],
+    [InlineKeyboardButton('Contacts', url='http://goodflymicrophones.com/kontakty/')]
     ]
 
 
 reply_markup = InlineKeyboardMarkup(keyboard)
 
-markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True, resize_keyboard=True)
+markup = ReplyKeyboardMarkup(reply_keyboard_button, one_time_keyboard=True, resize_keyboard=True)
 
 mapping = {'Microphones': 'http://goodflymicrophones.com/mikrofony/',
             'Preamps': 'http://goodflymicrophones.com/goodfly-mp312-2/',
@@ -67,23 +70,11 @@ class GFBot(object):
 
 """
 
-def append_m_id(update, user_data):
-    m_id = update.message.message_id
-    if user_data.get('message') is None:
-        user_data['messages'] = [m_id, ]
-    else:
-        user_data.get('message').append(m_id)
-
-def clear_msgs(update, user_data):
-    for item in user_data.get('message').items():
-        bot.deleteMessage(chat_id=update.message.chat.id, message_id=item)
 
 def start(bot, update, user_data): # when it starts
 
-    append_m_id(update, user_data)
 
-
-    update.message.reply_text('Menu', reply_markup=reply_markup)
+    update.message.reply_text('Hello!', reply_markup=markup)
 #     update.message.reply_text(
 #         "Hi! What about you want to know?",
 #         reply_markup=reply_markup)
@@ -91,18 +82,14 @@ def start(bot, update, user_data): # when it starts
     return CHOOSING
 
 def regular_choice(bot, update, user_data): #some stupid answer for regular choice
-    append_m_id(update, user_data)
 
-    text = update.message.text
-
-    update.message.reply_text(mapping.get(text))
+    update.message.reply_text('Menu', reply_markup=reply_markup)
 
     return CHOOSING
 
 def done(bot, update, user_data):# here is nothing needs/ clear and make goodbye
 
     update.message.reply_text("Thank you! Goodbye!")
-    clear_msgs(update, user_data)
     user_data.clear()
     return ConversationHandler.END
 
@@ -128,7 +115,7 @@ def main():
         entry_points=[CommandHandler('start', start, pass_user_data=True)],       #list of hndlers
 
         states={
-            CHOOSING: [RegexHandler('^(Microphones|Preamps|Compressors|Contacts)$',
+            CHOOSING: [RegexHandler('^(Products)$',
                                     regular_choice,
                                     pass_user_data=True),
                        ],
