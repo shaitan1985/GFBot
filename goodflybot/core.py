@@ -74,7 +74,7 @@ class GFBot(object):
 def start(bot, update, user_data): # when it starts
 
 
-    update.message.reply_text('Hello!', reply_markup=markup)
+    update.message.reply_text('Hello!heroku', reply_markup=markup)
 #     update.message.reply_text(
 #         "Hi! What about you want to know?",
 #         reply_markup=reply_markup)
